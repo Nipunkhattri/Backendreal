@@ -280,6 +280,38 @@ const propertySchema = mongoose.Schema({
             }
         }
     },
+    comments:[
+        {
+            userName:{
+                type:String,
+                required:true
+            },
+            content:{
+                type:String,
+                required:true
+            },
+            timestamp: {
+                type: Date,
+                default: Date.now,
+            },
+            replies:[
+                {
+                      userName:{
+                        type:String,
+                        required:true
+                      },
+                      content: {
+                        type: String,
+                        required: true,
+                      },
+                      timestamp: {
+                        type: Date,
+                        default: Date.now,
+                      },
+                }
+            ]
+        }
+    ],
     reviews: {
         heading: {
             type: String,
