@@ -10,15 +10,19 @@ const secret = "Mynameisnipun";
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, Phone } = req.body;
+    const { name, Phone } = req.body;
     const ph = Phone;
-    const hashedPassword = await bcrypt.hash(password, 12);
-    console.log(hashedPassword);
+
+    const user = await usermodel.findOne({ Phone: Phone  });
+    console.log(user);
+
+    if (user !== null) {
+      return res.status(200).json({ message: "Already Registered" });
+    }
+
 
     const result = await usermodel.create({
       Name: name,
-      Email: email,
-      Password: hashedPassword,
       Phone: ph,
     });
 
@@ -42,7 +46,6 @@ router.post("/login", async (req, res) => {
     }
 
     const matchParrsword = await bcrypt.compare(Password, user.Password);
-
     if (!matchParrsword) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -56,10 +59,10 @@ router.post("/login", async (req, res) => {
 
 router.post("/setotp", async (req, res) => {
   console.log(req.body);
-  const { phone } = req.body;
-  console.log(phone);
+  const { Phone } = req.body;
+  console.log(Phone);
   try {
-    const existinguser = await usermodel.findOne({ Phone: phone });
+    const existinguser = await usermodel.findOne({ Phone: Phone });
     console.log(existinguser);
     if (!existinguser) {
       return res.status(404).json("user doesnot exist");
