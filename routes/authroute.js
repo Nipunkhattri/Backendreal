@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
     if (user !== null) {
       return res.status(200).json({ message: "Already Registered" });
     }
-
+    
 
     const result = await usermodel.create({
       Name: name,

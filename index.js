@@ -11,6 +11,7 @@ const advertisementRoutes = require('./routes/advertisement.routes')
 const auth = require('./routes/authroute.js')
 const Regiter = require('./routes/authroute.js')
 const session = require('express-session');
+const Property = require('./models/property.model.js')
 
 require('dotenv').config()
 
@@ -77,6 +78,19 @@ if (req.session.isAuthenticated) {
 app.use(`/api/v1/properties`, propertyRoutes)
 app.use(`/api/v1/advertisements` , advertisementRoutes)
 app.use(`/api/v1/auth`, auth)
+
+app.post('/query',async(req,res)=>{
+    try {
+        console.log(req.body);
+        const query = req.body;
+        const result = await Property.find(query).exec(); // Use .exec() to execute the query
+        console.log(result);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        res.status(401).json("wrong");
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
